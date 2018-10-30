@@ -23,7 +23,7 @@ def get_hit_count():
             if retries == 0:
             # If the client has attempted a number of time equal to retries do the following.
                 raise exc
-                # Riase the connection error exception.
+                # Raise the connection error exception.
             retries -= 1
             # Otherwise if the client has not retried a number of times equal to retries, decrement retries and try again.
             time.sleep(0.5)
