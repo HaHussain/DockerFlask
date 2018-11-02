@@ -17,7 +17,9 @@ def get_hit_count():
     while True:
         # Loop until exited.
         try:
-            return cache.incr('hits')
+            hits = cache.incr('hits')
+            NonVolatileHits.write(str(hits))
+            return hits
             # Return the current number of hits to the server
         except redis.exceptions.ConnectionError as exc:
             # If the client does not reach the server.
@@ -42,5 +44,8 @@ def hello():
 
 
 if __name__ == "__main__":
+    NonVolatileHits = open("HitRecord.txt", "r+")
+    cache.set('hits', int(NonVolatileHits.read()))
     # Run the server off of localhost and enable debugging.
     app.run(host="0.0.0.0", debug=True)
+    NonVolatileHits.close()
