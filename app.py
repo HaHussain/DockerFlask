@@ -44,7 +44,7 @@ def hello():
 
 
 if __name__ == "__main__":
-    NonVolatileHits = open("HitRecord.txt", "r+")
+    NonVolatileHits = open("HitRecord.txt", "w+")
     cache.set('hits', int(NonVolatileHits.read()))
     # Run the server off of localhost and enable debugging.
     app.run(host="0.0.0.0", debug=True)
