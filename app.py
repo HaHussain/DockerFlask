@@ -44,8 +44,12 @@ def hello():
 
 
 if __name__ == "__main__":
-    NonVolatileHits = open("HitRecord.txt", "w+")
-    cache.set('hits', int(NonVolatileHits.read()))
+    NonVolatileHits = open("./Persistancy/HitRecord.txt", "r+")
+    try:
+        FileHitCounter = int(NonVolatileHits.read())
+    except ValueError:
+        FileHitCounter = 1
+    cache.set('hits', FileHitCounter)
     # Run the server off of localhost and enable debugging.
     app.run(host="0.0.0.0", debug=True)
     NonVolatileHits.close()
