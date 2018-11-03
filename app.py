@@ -18,7 +18,9 @@ def get_hit_count():
         # Loop until exited.
         try:
             hits = cache.incr('hits')
+            # Increase the number of hits in the redis cache by 1.
             NonVolatileHits.write(str(hits))
+            # Write that number to the .txt file.
             return hits
             # Return the current number of hits to the server
         except redis.exceptions.ConnectionError as exc:
@@ -45,11 +47,17 @@ def hello():
 
 if __name__ == "__main__":
     NonVolatileHits = open("./Persistancy/HitRecord.txt", "r+")
+    # Open file within directory where the hits would be stored with readwrite
     if NonVolatileHits.read() = '':
+        # Check if the file has any data in it.
         FileHitCounter = 0
+        # If not initialise the hit count as 0.
     else:
         FileHitCounter = NonVolatileHits.read()
+        # Otherwise initialise it with whatever the value is in the .txt file.
     cache.set('hits', FileHitCounter)
-    # Run the server off of localhost and enable debugging.
+    # Save this value to the redis cache.
     app.run(host="0.0.0.0", debug=True)
+    # Run the server off of localhost and enable debugging.
     NonVolatileHits.close()
+    # Close and save changes to the file.
