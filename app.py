@@ -52,7 +52,7 @@ def hello():
 if __name__ == "__main__":
     NonVolatileHits = open("./Persistancy/HitRecord.txt", "r+")
     # Open file within directory where the hits would be stored with readwrite
-    if NonVolatileHits.read() = '':
+    if NonVolatileHits.read() == '':
         # Check if the file has any data in it.
         FileHitCounter = 0
         # If not initialise the hit count as 0.
