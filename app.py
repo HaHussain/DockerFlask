@@ -1,43 +1,24 @@
 import time
 
-import redis
 from flask import Flask
 
 
 app = Flask(__name__)
 # Create a Flask server called app.
-cache = redis.Redis(host='redis', port=6379)
-# Create a redis cache called cache bound to port 6379.
 
 
 def get_hit_count():
-    # When someone accesses the server, log a hit to the cache.
-    retries = 5
     # The number of attempts the client has to reach the server.
-    while True:
-        # Loop until exited.
-        try:
-            hits = cache.incr('hits')
-            # Increase the number of hits in the redis cache by 1.
-            NonVolatileHits = open("./Persistancy/HitRecord.txt", "r+")
-            # Open the file where the hit record will be updated.
-            NonVolatileHits.write(str(hits))
-            # Write that number to the .txt file.
-            NonVolatileHits.close()
-            # Close that file after being written to save changes.
-            return hits
-            # Return the current number of hits to the server
-        except redis.exceptions.ConnectionError as exc:
-            # If the client does not reach the server.
-            if retries == 0:
-                # If the client has tried a number of time equal to retries:
-                raise exc
-                # Raise the connection error exception.
-            retries -= 1
-            # If the client has not retried a number of times equal to retries,
-            # Decrement retries and try again.
-            time.sleep(0.5)
-            # Wait so that server has time to catch up to client requests.
+    NonVolatileHits = open("./Persistancy/HitRecord.txt", "r+")
+    # Open the file where the hit record will be updated.
+    hits = NonVolatileHits.read()
+    # Read the current number of hits saved by the server.
+    hits += 1
+    # Increment the number of hits by 1.
+    time.sleep(0.5)
+    # Wait so that server has time to catch up to client requests.
+    return hits
+    # Return the current number of hits to the server
 
 
 @app.route('/')
@@ -47,6 +28,10 @@ def hello():
     # Find the number of times the server has been hit.
     return 'Hello World! I have been seen {} times.\n'.format(count)
     # Output a message with the number of times the server has been hit.
+    NonVolatileHits.write(count)
+    # Write the new number of hits to the file.
+    NonVolatileHits.close()
+    # Close the file and save its new value.
 
 
 if __name__ == "__main__":
@@ -61,7 +46,5 @@ if __name__ == "__main__":
         # Otherwise initialise it with whatever the value is in the .txt file.
     NonVolatileHits.close()
     # Close and save changes to the file.
-    cache.set('hits', FileHitCounter)
-    # Save this value to the redis cache.
     app.run(host="0.0.0.0", debug=True)
     # Run the server off of localhost and enable debugging.

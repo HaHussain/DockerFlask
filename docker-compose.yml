@@ -6,5 +6,3 @@ services:
      - "5000:5000"
     volumes:
      - ./Persistancy:/app/Persistancy
-  redis:
-    image: "redis:alpine"
