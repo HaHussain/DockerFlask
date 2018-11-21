@@ -1,5 +1,5 @@
 import time
-import logging
+# import logging
 
 from flask import Flask
 
@@ -14,7 +14,7 @@ def get_hit_count():
     # logging.debug("Hitcount function entered")
     # The number of attempts the client has to reach the server.
     NonVolatileHits = open("./Persistancy/HitRecord.txt", "r+")
-    logging.info("Opened .txt file")
+    # logging.debug("Opened .txt file")
     # Open the file where the hit record will be updated.
     hits = int(NonVolatileHits.read())
     # logging.debug("Read .txt file")
@@ -25,28 +25,28 @@ def get_hit_count():
     NonVolatileHits = open("./Persistancy/HitRecord.txt", "r+")
     # Open the file again to reset marker to overwrite previous data
     NonVolatileHits.write(str(hits))
-    logging.info("Write the new number of Hits to text file")
+    # logging.debug("Write the new number of Hits to text file")
     # Write the new number of hits to the file.
     NonVolatileHits.close()
-    logging.info("Saving text file")
+    # logging.debug("Saving text file")
     # Close the file and save its new value.
     time.sleep(0.5)
-    logging.info("Waiting 0.5 ms")
+    # logging.debug("Waiting 0.5 ms")
     # Wait so that server has time to catch up to client requests.
     return hits
-    logging.info("Exiting hit count function")
+    # logging.debug("Exiting hit count function")
     # Return the current number of hits to the server
 
 
 @app.route('/')
 def hello():
-    logging.info("Server has been hit")
+    # logging.debug("Server has been hit")
     # Run the hello function when the server is accessed by a client.
     count = get_hit_count()
     # logging.debug("Hit count function called")
     # Find the number of times the server has been hit.
     return 'Hello World! I have been seen {} times.\n'.format(count)
-    logging.info("Outputting text to server")
+    # logging.debug("Outputting text to server")
     # Output a message with the number of times the server has been hit.
 
 
