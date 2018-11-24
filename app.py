@@ -8,7 +8,6 @@ app = Flask(__name__)
 # Create a Flask server called app.
 cache = redis.Redis(host='redis', port=6379)
 # Create a redis cache called cache bound to port 6379.
-cache.set('hits', 0, nx=True)
 
 
 def get_hit_count():
